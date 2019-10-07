@@ -67,34 +67,22 @@ export default function App() {
       <TouchableHighlight 
         style={styles.playButton} 
         onPress={() => {
-          function runIteration(numTimes: number, delay: number) {
-            var cnt = 0;
+          function runIteration(keys: string[], delay: number) {
+            let cnt = 0;
+            let numTimes = keys.length;
             function next() {
               if (notes[keys[cnt]]) {
                 playSound(keys[cnt]);
               }
-                cnt++;
-                if (cnt < numTimes) {
-                    setTimeout(next, delay);
-                }
+              cnt++;
+              if (cnt < numTimes) {
+                  setTimeout(next, delay);
+              }
             }
             next();
-        }
-        const keys = Object.keys(notes);
-        runIteration(keys.length, 500);
-
-
-
-
-
-          /*Object.keys(keys).forEach(async key => {
-
-
-            if (keys[key]) {
-
-              await playSound(key);
-            }
-          });*/
+          }
+          const keys = Object.keys(notes).filter(note => notes[note]);
+          runIteration(keys, 500);
         }}
       >
         <Text>Play!</Text>
