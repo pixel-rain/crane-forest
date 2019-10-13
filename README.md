@@ -1,1 +1,1 @@
-An app to visually compose simple pentatonic music, it's to be written with Typescript, it's also to apply Redux, currently it's just a bare Expo app with some minor functionality. Because the Expo lib for audio is severly bugged the project is to be ejected from Expo. Work in progress.
+An app to visually compose simple pentatonic music, it's to be written with Typescript, it's also to apply Redux, currently it's just a bare Expo app with some minor functionality. Work in progress.

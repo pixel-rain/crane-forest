@@ -24,7 +24,10 @@ export default function Player() {
     const soundObject = new Audio.Sound();
     try {
       await soundObject.loadAsync(soundAssets[key]);
-      await soundObject.playAsync();
+      const status = await soundObject.playAsync();
+      setTimeout(() => {
+        soundObject.unloadAsync();
+      }, status.playableDurationMillis); //despite typescrypt displays an error it works
     } 
     catch (error) {
       console.log(error.message)
