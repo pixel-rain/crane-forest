@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import { Audio } from 'expo-av';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../reducers/rootReducer';
@@ -8,6 +8,8 @@ export default function Player() {
   
   const dispatch = useDispatch();
   const notes = useSelector((state: State) => state.notes);
+  const x = useSelector((state: State) => state.x);
+  const y = useSelector((state: State) => state.y);
 
   const soundAssets = {
     violin_G3_05_forte: require('../assets/sounds/violin_G3_05_forte.mp3'),
@@ -34,35 +36,35 @@ export default function Player() {
     }
   }
 
-  const buttons = [
-    'violin_G3_05_forte', 
-    'violin_A3_05_forte', 
-    'violin_B3_05_forte', 
-    'violin_C4_05_forte', 
-    'violin_D4_05_forte', 
-    'violin_E4_05_forte', 
-    'violin_F4_05_forte', 
-    'violin_G4_05_forte'
-  ].map(i => 
-    <TouchableHighlight 
-      style={{...styles.key, backgroundColor: notes[i] ? 'black' : 'white'}}
-      onPress={() =>
-        dispatch({ type: 'UPDATE_MELODY', payload: {[i]: notes[i] ? false : true} })
-      }
-      underlayColor={notes[i] ? "white" : "black"}
-      key={i}
-    >
-      <Text></Text>
-    </TouchableHighlight>
-  );
+  let buttons = [];
+
+  for (let i = 0; i < y; i++) {
+    buttons.push([]);
+    for (let j = 0; j < x; j++) {
+      buttons[i].push(
+        <TouchableWithoutFeedback
+          onPress={() =>
+            dispatch({ type: 'UPDATE_MELODY', payload: {yPos: i, xPos: j, toPlay: notes[i][j] ? false : true} })
+          }
+          key={i + String(j) + "inner_key"}
+        >
+          <View
+            style={{...styles.key, backgroundColor: notes[i][j] ? 'black' : 'white'}}
+          ></View>
+        </TouchableWithoutFeedback>
+      );
+    }
+  }
+
+  buttons = buttons.map((button, i) => <View style={styles.keyLine} key={i + "outer_key"}>{button}</View>);
 
   return (
     <View>
-      <View style={styles.keyBox}>
+      <View>
         {buttons}
       </View>
       <TouchableHighlight 
-        style={styles.playButton} 
+        style={styles.controlButton} 
         onPress={() => {
           function runIteration(keys: string[], delay: number) {
             let cnt = 0;
@@ -82,7 +84,13 @@ export default function Player() {
           runIteration(keys, 500);
         }}
       >
-        <Text>Play!</Text>
+        <Text>Play</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        style={styles.controlButton}
+        onPress={() => dispatch({ type: 'CLEAR_MELODY', payload: {yPos: null, xPos: null, toPlay: null} })} 
+      >
+        <Text>Clear</Text>  
       </TouchableHighlight>
     </View>
   );
@@ -92,13 +100,13 @@ const styles = StyleSheet.create({
   key: {
     width: 40,
     height: 40,
-    margin: 2,
+    margin: -1,
     borderWidth: 1
   },
-  keyBox: {
+  keyLine: {
     flexDirection: 'row'
   },
-  playButton: {
+  controlButton: {
     borderWidth: 1,
     padding: 4,
     paddingLeft: 8,

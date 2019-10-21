@@ -1,9 +1,10 @@
 const UPDATE_MELODY = 'UPDATE_MELODY';
+const CLEAR_MELODY = 'CLEAR_MELODY';
 
 const initialState = {
     notes: [],
     x: 8,
-    y: 20
+    y: 12
 };
 
 for (let i = 0; i < initialState.y; i++) {
@@ -27,12 +28,14 @@ interface Action {
 
 export default function rootReducer(state: State = initialState, action: Action) {
     switch (action.type) {
-        case 'UPDATE_MELODY':
+        case UPDATE_MELODY:
             const {yPos, xPos, toPlay} = action.payload;
             const temp = [...state.notes];
             temp[yPos] = [...temp[yPos]];
             temp[yPos][xPos] = toPlay;
             return {...state, notes: [...temp]};
+        case CLEAR_MELODY:
+            return {...initialState, notes: [...initialState.notes]}
         default:
             return state;
     }
