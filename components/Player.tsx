@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableHighlight, TouchableWithoutFeedback } 
 import { Audio } from 'expo-av';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../reducers/rootReducer';
+import soundAssets from '../assets/sounds/soundAssets';
 
 export default function Player() {
   
@@ -10,18 +11,18 @@ export default function Player() {
   const notes = useSelector((state: State) => state.notes);
   const x = useSelector((state: State) => state.x);
   const y = useSelector((state: State) => state.y);
-
-  const soundAssets = {
-    violin_G3_05_forte: require('../assets/sounds/violin_G3_05_forte.mp3'),
-    violin_A3_05_forte: require('../assets/sounds/violin_A3_05_forte.mp3'),
-    violin_B3_05_forte: require('../assets/sounds/violin_B3_05_forte.mp3'),
-    violin_C4_05_forte: require('../assets/sounds/violin_C4_05_forte.mp3'),
-    violin_D4_05_forte: require('../assets/sounds/violin_D4_05_forte.mp3'),
-    violin_E4_05_forte: require('../assets/sounds/violin_E4_05_forte.mp3'),
-    violin_F4_05_forte: require('../assets/sounds/violin_F4_05_forte.mp3'),
-    violin_G4_05_forte: require('../assets/sounds/violin_G4_05_forte.mp3'),
-  }
   
+  const violinKeys = [
+    'violin_G3_05_forte',
+    'violin_A3_05_forte',
+    'violin_B3_05_forte',
+    'violin_C4_05_forte',
+    'violin_D4_05_forte',
+    'violin_E4_05_forte',
+    'violin_F4_05_forte',
+    'violin_G4_05_forte',
+  ];
+
   async function playSound(key: string) {
     const soundObject = new Audio.Sound();
     try {
@@ -46,7 +47,7 @@ export default function Player() {
           onPress={() =>
             dispatch({ type: 'UPDATE_MELODY', payload: {yPos: i, xPos: j, toPlay: notes[i][j] ? false : true} })
           }
-          key={i + String(j) + "inner_key"}
+          key={i + String(j) + 'inner_key'}
         >
           <View
             style={{...styles.key, backgroundColor: notes[i][j] ? 'black' : 'white'}}
@@ -56,7 +57,7 @@ export default function Player() {
     }
   }
 
-  buttons = buttons.map((button, i) => <View style={styles.keyLine} key={i + "outer_key"}>{button}</View>);
+  buttons = buttons.map((button, i) => <View style={styles.keyLine} key={i + 'outer_key'}>{button}</View>);
 
   return (
     <View>
@@ -66,12 +67,14 @@ export default function Player() {
       <TouchableHighlight 
         style={styles.controlButton} 
         onPress={() => {
-          function runIteration(keys: string[], delay: number) {
+          function runIteration(melody: boolean[][], delay: number) {
             let cnt = 0;
-            let numTimes = keys.length;
+            let numTimes = melody.length;
             function next() {
-              if (notes[keys[cnt]]) {
-                playSound(keys[cnt]);
+              for (let i = 0; i < x; i++) {
+                if (melody[cnt][i]) {
+                  playSound(violinKeys[i]);
+                }
               }
               cnt++;
               if (cnt < numTimes) {
@@ -80,8 +83,8 @@ export default function Player() {
             }
             next();
           }
-          const keys = Object.keys(notes).filter(note => notes[note]);
-          runIteration(keys, 500);
+          const melody = notes.filter(line => line.some(el => el));
+          runIteration(melody, 500);
         }}
       >
         <Text>Play</Text>
