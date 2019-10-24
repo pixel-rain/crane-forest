@@ -11,17 +11,30 @@ export default function Player() {
   const notes = useSelector((state: State) => state.notes);
   const x = useSelector((state: State) => state.x);
   const y = useSelector((state: State) => state.y);
+  const instrument = useSelector((state: State) => state.instrument);
   
-  const violinKeys = [
-    'violin_G3_05_forte',
-    'violin_A3_05_forte',
-    'violin_B3_05_forte',
-    'violin_C4_05_forte',
-    'violin_D4_05_forte',
-    'violin_E4_05_forte',
-    'violin_F4_05_forte',
-    'violin_G4_05_forte',
-  ];
+  const instrumentKeys = {
+    violin: [
+      'violin_G3_05_forte',
+      'violin_A3_05_forte',
+      'violin_B3_05_forte',
+      'violin_C4_05_forte',
+      'violin_D4_05_forte',
+      'violin_E4_05_forte',
+      'violin_F4_05_forte',
+      'violin_G4_05_forte',
+    ],
+    flute: [
+      'flute_G4_05_forte',
+      'flute_A4_05_forte',
+      'flute_B4_05_forte',
+      'flute_C5_05_forte',
+      'flute_D5_05_forte',
+      'flute_E5_05_forte',
+      'flute_F5_05_forte',
+      'flute_G5_05_forte',      
+    ],
+  };
 
   async function playSound(key: string) {
     const soundObject = new Audio.Sound();
@@ -45,12 +58,12 @@ export default function Player() {
       buttons[i].push(
         <TouchableWithoutFeedback
           onPress={() =>
-            dispatch({ type: 'UPDATE_MELODY', payload: {yPos: i, xPos: j, toPlay: notes[i][j] ? false : true} })
+            dispatch({ type: 'UPDATE_MELODY', payload: {yPos: i, xPos: j, instrumentToPlay: notes[i][j] !== 'none' ? 'none' : instrument} })
           }
           key={i + String(j) + 'inner_key'}
         >
           <View
-            style={{...styles.key, backgroundColor: notes[i][j] ? 'black' : 'white'}}
+            style={{...styles.key, backgroundColor: notes[i][j] !== 'none' ? 'black' : 'white'}}
           ></View>
         </TouchableWithoutFeedback>
       );
@@ -67,13 +80,14 @@ export default function Player() {
       <TouchableHighlight 
         style={styles.controlButton} 
         onPress={() => {
-          function runIteration(melody: boolean[][], delay: number) {
+          function runIteration(melody: string[][], delay: number) {
             let cnt = 0;
             let numTimes = melody.length;
             function next() {
               for (let i = 0; i < x; i++) {
-                if (melody[cnt][i]) {
-                  playSound(violinKeys[i]);
+                let currentInstrument = melody[cnt][i];
+                if (currentInstrument !== 'none') {
+                  playSound(instrumentKeys[currentInstrument][i]);
                 }
               }
               cnt++;
@@ -83,7 +97,7 @@ export default function Player() {
             }
             next();
           }
-          const melody = notes.filter(line => line.some(el => el));
+          const melody = notes.filter(line => line.some(el => el !== 'none'));
           runIteration(melody, 500);
         }}
       >
@@ -91,7 +105,7 @@ export default function Player() {
       </TouchableHighlight>
       <TouchableHighlight
         style={styles.controlButton}
-        onPress={() => dispatch({ type: 'CLEAR_MELODY', payload: {yPos: null, xPos: null, toPlay: null} })} 
+        onPress={() => dispatch({ type: 'CLEAR_MELODY', payload: {} })} 
       >
         <Text>Clear</Text>  
       </TouchableHighlight>
