@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TouchableWithoutFeedback, Picker } from 'react-native';
 import { Audio } from 'expo-av';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../reducers/rootReducer';
@@ -36,6 +36,8 @@ export default function Player() {
     ],
   };
 
+  const instrumentColors = {violin: "mediumpurple", flute: "lime"}
+
   async function playSound(key: string) {
     const soundObject = new Audio.Sound();
     try {
@@ -63,7 +65,7 @@ export default function Player() {
           key={i + String(j) + 'inner_key'}
         >
           <View
-            style={{...styles.key, backgroundColor: notes[i][j] !== 'none' ? 'black' : 'white'}}
+            style={{...styles.key, backgroundColor: notes[i][j] !== 'none' ? instrumentColors[notes[i][j]] : 'white'}}
           ></View>
         </TouchableWithoutFeedback>
       );
@@ -109,6 +111,13 @@ export default function Player() {
       >
         <Text>Clear</Text>  
       </TouchableHighlight>
+      <Picker
+        selectedValue={instrument}
+        onValueChange={value => dispatch({ type: 'CHANGE_INSTRUMENT', payload: {instrumentToSelect: value} })}
+      >
+        <Picker.Item label="Violin" value="violin" />
+        <Picker.Item label="Flute" value="flute" />
+      </Picker>
     </View>
   );
 }
