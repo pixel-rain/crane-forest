@@ -34,9 +34,19 @@ export default function Player() {
       'flute_F5_05_forte',
       'flute_G5_05_forte',      
     ],
+    contrabassoon: [
+      'contrabassoon_G2_05_mezzo_forte',
+      'contrabassoon_A2_05_forte',
+      'contrabassoon_B2_05_forte',
+      'contrabassoon_C2_05_forte',
+      'contrabassoon_D3_05_forte',
+      'contrabassoon_E3_05_forte',
+      'contrabassoon_F3_05_forte',
+      'contrabassoon_G3_05_forte',
+    ],
   };
 
-  const instrumentColors = {violin: "mediumpurple", flute: "lime"}
+  const instrumentColors = {violin: 'mediumpurple', flute: 'lime', contrabassoon: 'orangered'}
 
   async function playSound(key: string) {
     const soundObject = new Audio.Sound();
@@ -117,6 +127,7 @@ export default function Player() {
       >
         <Picker.Item label="Violin" value="violin" />
         <Picker.Item label="Flute" value="flute" />
+        <Picker.Item label="Contrabassoon" value="contrabassoon" />
       </Picker>
     </View>
   );

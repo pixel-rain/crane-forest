@@ -15,5 +15,13 @@ const soundAssets = {
     flute_E5_05_forte: require('./flute_E5_05_forte.mp3'),
     flute_F5_05_forte: require('./flute_F5_05_forte.mp3'),
     flute_G5_05_forte: require('./flute_G5_05_forte.mp3'),
+    contrabassoon_G2_05_mezzo_forte: require('./contrabassoon_G2_05_mezzo_forte.mp3'),
+    contrabassoon_A2_05_forte: require('./contrabassoon_A2_05_forte.mp3'),
+    contrabassoon_B2_05_forte: require('./contrabassoon_B2_05_forte.mp3'),
+    contrabassoon_C2_05_forte: require('./contrabassoon_C2_05_forte.mp3'),
+    contrabassoon_D3_05_forte: require('./contrabassoon_D3_05_forte.mp3'),
+    contrabassoon_E3_05_forte: require('./contrabassoon_E3_05_forte.mp3'),
+    contrabassoon_F3_05_forte: require('./contrabassoon_F3_05_forte.mp3'),
+    contrabassoon_G3_05_forte: require('./contrabassoon_G3_05_forte.mp3'),
 };
 export default soundAssets;
