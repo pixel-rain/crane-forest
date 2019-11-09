@@ -84,6 +84,49 @@ export default function Player() {
 
   buttons = buttons.map((button, i) => <View style={styles.keyLine} key={i + 'outer_key'}>{button}</View>);
 
+  function composeRandomMuelody() { //a simple random music generation with random seeding and some cellular automata
+    function gameOfLife(field: string[][], times: number) {
+      for (let t = 0; t < times; t++) {
+          for (let i = 0; i < y; i++) {
+              for (let j = 0; j < x; j++) {
+                  let neighbors = 0;
+                  if (i - 1 >= 0 && j - 1 >= 0 && field[i - 1][j - 1] !== "none") neighbors++;
+                  if (i + 1 < y && j - 1 >= 0 && field[i + 1][j - 1] !== "none") neighbors++;
+                  if (i - 1 >= 0 && j + 1 < x && field[i - 1][j + 1] !== "none") neighbors++;
+                  if (i - 1 >= 0 && field[i - 1][j] !== "none") neighbors++;
+                  if (i + 1 < y && field[i + 1][j] !== "none") neighbors++;
+                  if (j - 1 >= 0 && field[i][j - 1] !== "none") neighbors++;
+                  if (j + 1 < x && field[i][j + 1] !== "none") neighbors++;
+                  if (i + 1 < y && j + 1 < x && field[i + 1][j + 1] !== "none") neighbors++;
+                  if (field[i][j] !== "none") {
+                      if (neighbors < 2 || neighbors > 3) {
+                          field[i][j] = "none";
+                      }
+                  }
+                  else if (neighbors === 3) {
+                      field[i][j] = Object.keys(instrumentKeys)[Math.floor(Math.random() * 3)];	
+                  }
+              }
+          }
+      }
+      return field;
+    }
+    const field = [];
+    for (let i = 0; i < y; i++) {
+        const temp = [];
+        for (let j = 0; j < x; j++) {
+            if (Math.floor(Math.random() * 3) === 1) {
+                temp.push(Object.keys(instrumentKeys)[Math.floor(Math.random() * 3)]);
+            }
+            else {
+                temp.push("none");
+            }
+        }
+      field.push(temp);
+    }
+    dispatch({ type: 'RANDOM_MELODY', payload: {newNotes: gameOfLife([...field], 3)} })
+  }
+
   return (
     <View>
       <View>
@@ -121,14 +164,23 @@ export default function Player() {
       >
         <Text>Clear</Text>  
       </TouchableHighlight>
-      <Picker
-        selectedValue={instrument}
-        onValueChange={value => dispatch({ type: 'CHANGE_INSTRUMENT', payload: {instrumentToSelect: value} })}
+      <TouchableHighlight
+        style={styles.controlButton}
+        onPress={() => composeRandomMuelody()} 
       >
-        <Picker.Item label="Violin" value="violin" />
-        <Picker.Item label="Flute" value="flute" />
-        <Picker.Item label="Contrabassoon" value="contrabassoon" />
-      </Picker>
+        <Text>Random Melody</Text>  
+      </TouchableHighlight>
+      <View style={styles.picker}>
+        <Picker
+          style={styles.pickerItem}
+          selectedValue={instrument}
+          onValueChange={value => dispatch({ type: 'CHANGE_INSTRUMENT', payload: {instrumentToSelect: value} })}
+        >
+          <Picker.Item label="Violin" value="violin" />
+          <Picker.Item label="Flute" value="flute" />
+          <Picker.Item label="Contrabassoon" value="contrabassoon" />
+        </Picker>
+      </View>
     </View>
   );
 }
@@ -148,7 +200,14 @@ const styles = StyleSheet.create({
     padding: 4,
     paddingLeft: 8,
     paddingRight: 8,
-    marginTop: 5
+    marginTop: 5,
+  },
+  picker: {
+    borderWidth: 1,
+    marginTop: 5,
+  },
+  pickerItem: {
+    height: 25,
   },
 });
   

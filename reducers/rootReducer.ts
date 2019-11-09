@@ -1,6 +1,7 @@
 const UPDATE_MELODY = 'UPDATE_MELODY';
 const CLEAR_MELODY = 'CLEAR_MELODY';
 const CHANGE_INSTRUMENT = 'CHANGE_INSTRUMENT';
+const RANDOM_MELODY = 'RANDOM_MELODY';
 
 const initialState = {
     notes: [],
@@ -31,10 +32,11 @@ interface Action {
         xPos: number, //y position is a place in the melody, x position is a note
         instrumentToPlay: string, 
         instrumentToSelect: string,
+        newNotes: string[][],
     };
 }
 
-export default function rootReducer(state: State = initialState, action: Action) {
+export default function rootReducer(state: State = initialState, action: Action) { //to change cases to make deep copies instead of shallow ones
     switch (action.type) {
         case UPDATE_MELODY:
             const {yPos, xPos, instrumentToPlay} = action.payload;
@@ -47,6 +49,9 @@ export default function rootReducer(state: State = initialState, action: Action)
         case CHANGE_INSTRUMENT:
                 const {instrumentToSelect} = action.payload;
             return {...state, notes: [...state.notes], instrument: instrumentToSelect};
+            case RANDOM_MELODY:
+                const {newNotes} = action.payload;
+            return {...state, notes: [...newNotes]};
         default:
             return state;
     }
