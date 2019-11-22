@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, TouchableWithoutFeedback, Picker } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TouchableWithoutFeedback, Picker, ScrollView } from 'react-native';
 import { Audio } from 'expo-av';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../reducers/rootReducer';
@@ -129,63 +129,71 @@ export default function Player() {
 
   return (
     <View>
-      <View>
-        {buttons}
+      <View style={styles.outerButtonBox}>
+        <ScrollView persistentScrollbar={true /*despite typescrypt displays an error it works*/}>
+          {buttons}
+        </ScrollView>
       </View>
-      <TouchableHighlight 
-        style={styles.controlButton} 
-        onPress={() => {
-          function runIteration(melody: string[][], delay: number) {
-            let cnt = 0;
-            let numTimes = melody.length;
-            function next() {
-              for (let i = 0; i < x; i++) {
-                let currentInstrument = melody[cnt][i];
-                if (currentInstrument !== 'none') {
-                  playSound(instrumentKeys[currentInstrument][i]);
+      <View>
+        <TouchableHighlight 
+          style={styles.controlButton} 
+          onPress={() => {
+            function runIteration(melody: string[][], delay: number) {
+              let cnt = 0;
+              let numTimes = melody.length;
+              function next() {
+                for (let i = 0; i < x; i++) {
+                  let currentInstrument = melody[cnt][i];
+                  if (currentInstrument !== 'none') {
+                    playSound(instrumentKeys[currentInstrument][i]);
+                  }
+                }
+                cnt++;
+                if (cnt < numTimes) {
+                    setTimeout(next, delay);
                 }
               }
-              cnt++;
-              if (cnt < numTimes) {
-                  setTimeout(next, delay);
-              }
+              next();
             }
-            next();
-          }
-          const melody = notes.filter(line => line.some(el => el !== 'none'));
-          runIteration(melody, 500);
-        }}
-      >
-        <Text>Play</Text>
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={styles.controlButton}
-        onPress={() => dispatch({ type: 'CLEAR_MELODY', payload: {} })} 
-      >
-        <Text>Clear</Text>  
-      </TouchableHighlight>
-      <TouchableHighlight
-        style={styles.controlButton}
-        onPress={() => composeRandomMuelody()} 
-      >
-        <Text>Random Melody</Text>  
-      </TouchableHighlight>
-      <View style={styles.picker}>
-        <Picker
-          style={styles.pickerItem}
-          selectedValue={instrument}
-          onValueChange={value => dispatch({ type: 'CHANGE_INSTRUMENT', payload: {instrumentToSelect: value} })}
+            const melody = notes.filter(line => line.some(el => el !== 'none'));
+            runIteration(melody, 500);
+          }}
         >
-          <Picker.Item label="Violin" value="violin" />
-          <Picker.Item label="Flute" value="flute" />
-          <Picker.Item label="Contrabassoon" value="contrabassoon" />
-        </Picker>
+          <Text>Play</Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={styles.controlButton}
+          onPress={() => dispatch({ type: 'CLEAR_MELODY', payload: {} })} 
+        >
+          <Text>Clear</Text>  
+        </TouchableHighlight>
+        <TouchableHighlight
+          style={styles.controlButton}
+          onPress={() => composeRandomMuelody()} 
+        >
+          <Text>Random Melody</Text>  
+        </TouchableHighlight>
+        <View style={styles.picker}>
+          <Picker
+            style={styles.pickerItem}
+            selectedValue={instrument}
+            onValueChange={value => dispatch({ type: 'CHANGE_INSTRUMENT', payload: {instrumentToSelect: value} })}
+          >
+            <Picker.Item label="Violin" value="violin" />
+            <Picker.Item label="Flute" value="flute" />
+            <Picker.Item label="Contrabassoon" value="contrabassoon" />
+          </Picker>
+        </View>
       </View>
     </View>
   );
 }
   
 const styles = StyleSheet.create({
+  outerButtonBox: {
+    borderWidth: 1,
+    height: 458, 
+  },
   key: {
     width: 40,
     height: 40,

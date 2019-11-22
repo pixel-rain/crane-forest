@@ -6,7 +6,7 @@ const RANDOM_MELODY = 'RANDOM_MELODY';
 const initialState = {
     notes: [],
     x: 8,
-    y: 12,
+    y: 24,
     instrument: 'violin'
 };
 
