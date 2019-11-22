@@ -70,7 +70,7 @@ export default function Player() {
       buttons[i].push(
         <TouchableWithoutFeedback
           onPress={() =>
-            dispatch({ type: 'UPDATE_MELODY', payload: {yPos: i, xPos: j, instrumentToPlay: notes[i][j] !== 'none' ? 'none' : instrument} })
+            dispatch({ type: 'UPDATE_MELODY', payload: {yPos: i, xPos: j, instrumentToPlay: notes[i][j] === instrument ? 'none' : instrument} })
           }
           key={i + String(j) + 'inner_key'}
         >
