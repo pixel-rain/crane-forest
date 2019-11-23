@@ -2,12 +2,14 @@ const UPDATE_MELODY = 'UPDATE_MELODY';
 const CLEAR_MELODY = 'CLEAR_MELODY';
 const CHANGE_INSTRUMENT = 'CHANGE_INSTRUMENT';
 const RANDOM_MELODY = 'RANDOM_MELODY';
+const SELECT_INSTRUMENT_FOR_RANDOM_MELODY = 'SELECT_INSTRUMENT_FOR_RANDOM_MELODY';
 
 const initialState = {
     notes: [],
     x: 8,
     y: 24,
-    instrument: 'violin'
+    instrument: 'violin',
+    random_instruments: {violin: true, flute: true, contrabassoon: false},
 };
 
 for (let i = 0; i < initialState.y; i++) {
@@ -23,6 +25,7 @@ export interface State {
     x: number;
     y: number;
     instrument: string;
+    random_instruments: object,
 }
 
 interface Action {
@@ -33,6 +36,7 @@ interface Action {
         instrumentToPlay: string, 
         instrumentToSelect: string,
         newNotes: string[][],
+        randomInstrumentToChange: string,
     };
 }
 
@@ -43,15 +47,20 @@ export default function rootReducer(state: State = initialState, action: Action)
             const temp = [...state.notes];
             temp[yPos] = [...temp[yPos]];
             temp[yPos][xPos] = instrumentToPlay;
-            return {...state, notes: [...temp]};
+            return {...state, notes: [...temp]}; //maybe the second spreading is excessive
         case CLEAR_MELODY:
             return {...initialState, notes: [...initialState.notes]};
         case CHANGE_INSTRUMENT:
-                const {instrumentToSelect} = action.payload;
+            const {instrumentToSelect} = action.payload;
             return {...state, notes: [...state.notes], instrument: instrumentToSelect};
-            case RANDOM_MELODY:
-                const {newNotes} = action.payload;
+        case RANDOM_MELODY:
+            const {newNotes} = action.payload;
             return {...state, notes: [...newNotes]};
+        case SELECT_INSTRUMENT_FOR_RANDOM_MELODY:
+            const {randomInstrumentToChange} = action.payload;
+            const temp2 = {...state.random_instruments};
+            temp2[randomInstrumentToChange] = temp2[randomInstrumentToChange] ? false : true;
+            return {...state, random_instruments: {...temp2}}; //maybe the second spreading is excessive
         default:
             return state;
     }

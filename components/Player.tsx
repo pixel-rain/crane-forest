@@ -12,6 +12,7 @@ export default function Player() {
   const x = useSelector((state: State) => state.x);
   const y = useSelector((state: State) => state.y);
   const instrument = useSelector((state: State) => state.instrument);
+  const randomInstruments = useSelector((state: State) => state.random_instruments);
   
   const instrumentKeys = {
     violin: [
@@ -104,19 +105,21 @@ export default function Player() {
                       }
                   }
                   else if (neighbors === 3) {
-                      field[i][j] = Object.keys(instrumentKeys)[Math.floor(Math.random() * 3)];	
+                      field[i][j] = instruments[Math.floor(Math.random() * instruments.length)];	
                   }
               }
           }
       }
       return field;
     }
+    const instruments = Object.keys(randomInstruments).filter(i => randomInstruments[i]);
+    if (instruments.length === 0) return;
     const field = [];
     for (let i = 0; i < y; i++) {
         const temp = [];
         for (let j = 0; j < x; j++) {
             if (Math.floor(Math.random() * 3) === 1) {
-                temp.push(Object.keys(instrumentKeys)[Math.floor(Math.random() * 3)]);
+                temp.push(instruments[Math.floor(Math.random() * instruments.length)]);
             }
             else {
                 temp.push("none");
@@ -167,12 +170,41 @@ export default function Player() {
         >
           <Text>Clear</Text>  
         </TouchableHighlight>
-        <TouchableHighlight
-          style={styles.controlButton}
-          onPress={() => composeRandomMuelody()} 
-        >
-          <Text>Random Melody</Text>  
-        </TouchableHighlight>
+        <View style={styles.randomRow}>
+          <TouchableHighlight
+            style={styles.controlButton}
+            onPress={() => composeRandomMuelody()} 
+          >
+            <Text>Random Melody</Text>  
+          </TouchableHighlight>
+          <TouchableWithoutFeedback
+            onPress={() =>
+              dispatch({ type: 'SELECT_INSTRUMENT_FOR_RANDOM_MELODY', payload: {randomInstrumentToChange: 'violin'} })
+            }
+          >
+            <View
+              style={{...styles.tempRandomKey, backgroundColor: randomInstruments['violin'] ? instrumentColors['violin'] : 'white'}}
+            ></View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() =>
+              dispatch({ type: 'SELECT_INSTRUMENT_FOR_RANDOM_MELODY', payload: {randomInstrumentToChange: 'flute'} })
+            }
+          >
+            <View
+              style={{...styles.tempRandomKey, backgroundColor: randomInstruments['flute'] ? instrumentColors['flute'] : 'white'}}
+            ></View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() =>
+              dispatch({ type: 'SELECT_INSTRUMENT_FOR_RANDOM_MELODY', payload: {randomInstrumentToChange: 'contrabassoon'} })
+            }
+          >
+            <View
+              style={{...styles.tempRandomKey, backgroundColor: randomInstruments['contrabassoon'] ? instrumentColors['contrabassoon'] : 'white'}}
+            ></View>
+          </TouchableWithoutFeedback>
+        </View>
         <View style={styles.picker}>
           <Picker
             style={styles.pickerItem}
@@ -197,7 +229,7 @@ const styles = StyleSheet.create({
   key: {
     width: 40,
     height: 40,
-    margin: -1,
+    margin: -1, //to make their borders collapse
     borderWidth: 1
   },
   keyLine: {
@@ -216,6 +248,25 @@ const styles = StyleSheet.create({
   },
   pickerItem: {
     height: 25,
+  },
+  randomRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  tempRandomKey: { //a temporary layout
+    borderWidth: 1,
+    width: 44,
+    height: 29,
+    marginLeft: 7,
+  },
+  tempPurple: {
+    backgroundColor: 'mediumpurple',
+  },
+  tempLime: {
+    backgroundColor: 'lime',
+  },
+  tempRed: {
+    backgroundColor: 'orangered',
   },
 });
   
