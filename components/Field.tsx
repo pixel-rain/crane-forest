@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../reducers/rootReducer';
+import instrumentColors from '../assets/instrumentColors';
 
 export default function Field() {
 
@@ -10,8 +11,6 @@ export default function Field() {
     const x = useSelector((state: State) => state.x);
     const y = useSelector((state: State) => state.y);
     const instrument = useSelector((state: State) => state.instrument);
-
-    const instrumentColors = {violin: 'mediumpurple', flute: 'lime', contrabassoon: 'orangered'};
 
     let buttons = [];
     for (let i = 0; i < y; i++) {

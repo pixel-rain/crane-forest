@@ -23,5 +23,13 @@ const soundAssets = {
     contrabassoon_E3_05_forte: require('./contrabassoon_E3_05_forte.mp3'),
     contrabassoon_F3_05_forte: require('./contrabassoon_F3_05_forte.mp3'),
     contrabassoon_G3_05_forte: require('./contrabassoon_G3_05_forte.mp3'),
+    clarinet_G3_05_forte: require('./clarinet_G3_05_forte.mp3'),
+    clarinet_A3_05_forte: require('./clarinet_A3_05_forte.mp3'),
+    clarinet_B3_05_forte: require('./clarinet_B3_05_forte.mp3'),
+    clarinet_C4_05_forte: require('./clarinet_C4_05_forte.mp3'),
+    clarinet_D4_05_forte: require('./clarinet_D4_05_forte.mp3'),
+    clarinet_E4_05_forte: require('./clarinet_E4_05_forte.mp3'),
+    clarinet_F4_05_forte: require('./clarinet_F4_05_forte.mp3'),
+    clarinet_G4_05_forte: require('./clarinet_G4_05_forte.mp3'),
 };
 export default soundAssets;

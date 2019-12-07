@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../reducers/rootReducer';
 import { Audio } from 'expo-av';
 import soundAssets from '../assets/sounds/soundAssets';
+import instrumentColors from '../assets/instrumentColors';
+import instrumentKeys from '../assets/instrumentKeys';
 
 export default function Controls() {
 
@@ -13,41 +15,6 @@ export default function Controls() {
     const y = useSelector((state: State) => state.y);
     const instrument = useSelector((state: State) => state.instrument);
     const randomInstruments = useSelector((state: State) => state.random_instruments);
-  
-    const instrumentKeys = {
-      violin: [
-        'violin_G3_05_forte',
-        'violin_A3_05_forte',
-        'violin_B3_05_forte',
-        'violin_C4_05_forte',
-        'violin_D4_05_forte',
-        'violin_E4_05_forte',
-        'violin_F4_05_forte',
-        'violin_G4_05_forte',
-      ],
-      flute: [
-        'flute_G4_05_forte',
-        'flute_A4_05_forte',
-        'flute_B4_05_forte',
-        'flute_C5_05_forte',
-        'flute_D5_05_forte',
-        'flute_E5_05_forte',
-        'flute_F5_05_forte',
-        'flute_G5_05_forte',      
-      ],
-      contrabassoon: [
-        'contrabassoon_G2_05_mezzo_forte',
-        'contrabassoon_A2_05_forte',
-        'contrabassoon_B2_05_forte',
-        'contrabassoon_C2_05_forte',
-        'contrabassoon_D3_05_forte',
-        'contrabassoon_E3_05_forte',
-        'contrabassoon_F3_05_forte',
-        'contrabassoon_G3_05_forte',
-      ],
-    };
-  
-    const instrumentColors = {violin: 'mediumpurple', flute: 'lime', contrabassoon: 'orangered'};
 
     async function playSound(key: string) {
         const soundObject = new Audio.Sound();
@@ -176,6 +143,15 @@ export default function Controls() {
                     style={{...styles.tempRandomKey, backgroundColor: randomInstruments['contrabassoon'] ? instrumentColors['contrabassoon'] : 'white'}}
                 ></View>
                 </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback
+                onPress={() =>
+                    dispatch({ type: 'SELECT_INSTRUMENT_FOR_RANDOM_MELODY', payload: {randomInstrumentToChange: 'clarinet'} })
+                }
+                >
+                <View
+                    style={{...styles.tempRandomKey, backgroundColor: randomInstruments['clarinet'] ? instrumentColors['clarinet'] : 'white'}}
+                ></View>
+                </TouchableWithoutFeedback>                
             </View>
             <View style={styles.picker}>
                 <Picker
@@ -186,6 +162,7 @@ export default function Controls() {
                 <Picker.Item label="Violin" value="violin" />
                 <Picker.Item label="Flute" value="flute" />
                 <Picker.Item label="Contrabassoon" value="contrabassoon" />
+                <Picker.Item label="Clarinet" value="clarinet" />
                 </Picker>
             </View>
         </View>
@@ -214,7 +191,7 @@ const styles = StyleSheet.create({
     },
     tempRandomKey: { //a temporary layout
       borderWidth: 1,
-      width: 44,
+      width: 29,
       height: 29,
       marginLeft: 7,
     },

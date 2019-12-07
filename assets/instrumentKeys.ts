@@ -1,0 +1,43 @@
+const instrumentKeys = {
+    violin: [
+        'violin_G3_05_forte',
+        'violin_A3_05_forte',
+        'violin_B3_05_forte',
+        'violin_C4_05_forte',
+        'violin_D4_05_forte',
+        'violin_E4_05_forte',
+        'violin_F4_05_forte',
+        'violin_G4_05_forte',
+    ],
+    flute: [
+        'flute_G4_05_forte',
+        'flute_A4_05_forte',
+        'flute_B4_05_forte',
+        'flute_C5_05_forte',
+        'flute_D5_05_forte',
+        'flute_E5_05_forte',
+        'flute_F5_05_forte',
+        'flute_G5_05_forte',      
+    ],
+    contrabassoon: [
+        'contrabassoon_G2_05_mezzo_forte',
+        'contrabassoon_A2_05_forte',
+        'contrabassoon_B2_05_forte',
+        'contrabassoon_C2_05_forte',
+        'contrabassoon_D3_05_forte',
+        'contrabassoon_E3_05_forte',
+        'contrabassoon_F3_05_forte',
+        'contrabassoon_G3_05_forte',
+    ],
+    clarinet: [
+        'clarinet_G3_05_forte',
+        'clarinet_A3_05_forte',
+        'clarinet_B3_05_forte',
+        'clarinet_C4_05_forte',
+        'clarinet_D4_05_forte',
+        'clarinet_E4_05_forte',
+        'clarinet_F4_05_forte',
+        'clarinet_G4_05_forte',        
+    ],
+  };
+export default instrumentKeys;

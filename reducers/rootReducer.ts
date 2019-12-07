@@ -9,7 +9,7 @@ const initialState = {
     x: 8,
     y: 24,
     instrument: 'violin',
-    random_instruments: {violin: true, flute: true, contrabassoon: false},
+    random_instruments: {violin: true, flute: true, contrabassoon: false, clarinet: true},
 };
 
 for (let i = 0; i < initialState.y; i++) {
